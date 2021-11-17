@@ -23,7 +23,7 @@ type Repository struct {
 
 func NewRepository(db *DB) *Repository {
 	return &Repository{
-		NewAuthorizerSqlite(db),
-		NewMessengerSqlite(db),
+		NewAuthorizerPostgres(db),
+		NewMessengerPostgres(db),
 	}
 }

@@ -13,8 +13,12 @@ import (
 )
 
 func main() {
-	db, err := repository.NewSqliteDB(repository.SqliteConfig{
-		Path: "",
+	db, err := repository.NewPostgresDB(repository.PostgresConfig{
+		"",
+		"",
+		"",
+		"",
+		"",
 	})
 	if err != nil {
 		log.Fatalf("failed to initialize db: %s", err.Error())

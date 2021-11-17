@@ -5,15 +5,15 @@ import (
 	"fmt"
 )
 
-type Authorizer struct {
+type AuthorizerSqlite struct {
 	db *DB
 }
 
-func NewAuthorizerSqlite(db *DB) *Authorizer {
-	return &Authorizer{db: db}
+func NewAuthorizerSqlite(db *DB) *AuthorizerSqlite {
+	return &AuthorizerSqlite{db: db}
 }
 
-func (a *Authorizer) CreateUser(user chat.User) (int, error) {
+func (a *AuthorizerSqlite) CreateUser(user chat.User) (int, error) {
 	var id int
 	query := fmt.Sprintf(
 		"INSERT INTO %s (name, username, password_hash) VALUES ($1, $2, $3)",
@@ -37,7 +37,7 @@ func (a *Authorizer) CreateUser(user chat.User) (int, error) {
 	return id, nil
 }
 
-func (a *Authorizer) GetUser(username string, password string) (chat.User, error) {
+func (a *AuthorizerSqlite) GetUser(username string, password string) (chat.User, error) {
 	var user chat.User
 	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
 	err := a.db.Get(&user, query, username, password)
@@ -45,7 +45,7 @@ func (a *Authorizer) GetUser(username string, password string) (chat.User, error
 	return user, err
 }
 
-func (a *Authorizer) CanCreateNewUser(username string) bool {
+func (a *AuthorizerSqlite) CanCreateNewUser(username string) bool {
 	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1", usersTable)
 	var id int
 	err := a.db.Get(&id, query, username)
